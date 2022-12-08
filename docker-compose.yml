@@ -1,0 +1,38 @@
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fastapizada
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  
+  #python:
+  #  depends_on:
+  #    - postgres
+  #  container_name: python_container
+  #  image: python:3.11
+  #  command: python -m uvicorn main:app --host 0.0.0.0 TESTAR SEM O COMANDO
+  #  restart: unless-stopped
+  #  environment:
+  #    - POSTGRES_USER=postgres
+  #    - POSTGRES_PASSWORD=postgres
+  #    - POSTGRES_DB=fastapizada
+  #    - POSTGRES_HOST=postgres:5432 #referencia ao serviço postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
