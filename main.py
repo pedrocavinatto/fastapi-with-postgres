@@ -1,8 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from database import Database
 from Classes.User import User
+import os
 
 app = FastAPI()
+
+#Env variables
+db_name = os.environ['POSTGRES_DB']
+db_user = os.environ['POSTGRES_USER']
+db_password = os.environ['POSTGRES_PASSWORD']
+db_host = os.environ['POSTGRES_HOST']
+db_port = os.environ['POSTGRES_PORT']
 
 
 @app.get("/")
@@ -12,7 +20,7 @@ async def root():
 @app.get("/users")
 async def users():
     try:
-        db = Database("fastapizada", "postgres", "postgres", "localhost", 5432);
+        db = Database(db_name, db_user, db_password, db_host, db_port);
         cursor = db.connect()
         cursor.execute("SELECT * FROM users")
         users = cursor.fetchall()
@@ -26,9 +34,8 @@ async def users():
 
 @app.post("/users", status_code=201)
 async def create_user(user: User):
-    print(user)
     try:
-        db = Database("fastapizada", "postgres", "postgres", "localhost", 5432);
+        db = Database(db_name, db_user, db_password, db_host, db_port);
         cursor = db.connect()
         cursor.execute("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", (user.name, user.email, user.age))
         db.close()

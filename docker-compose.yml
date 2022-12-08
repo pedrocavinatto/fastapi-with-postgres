@@ -14,25 +14,29 @@ services:
       - "5432:5432"
     networks:
       - postgres
-    restart: unless-stopped
   
-  #python:
-  #  depends_on:
-  #    - postgres
-  #  container_name: python_container
-  #  image: python:3.11
-  #  command: python -m uvicorn main:app --host 0.0.0.0 TESTAR SEM O COMANDO
-  #  restart: unless-stopped
-  #  environment:
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_PASSWORD=postgres
-  #    - POSTGRES_DB=fastapizada
-  #    - POSTGRES_HOST=postgres:5432 #referencia ao serviço postgres
+  python:
+    container_name: python_container
+    image: python:3.11
+    volumes:
+      - .:/src:ro
+    working_dir: /src
+    command: bash -c "pip install -r ./requirements.txt && python -m uvicorn main:app --host 0.0.0.0"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fastapizada
+      - POSTGRES_HOST=postgres #referencia ao serviço postgres
+      - POSTGRES_PORT=5432
+    ports:
+      - 8000:8000
+    networks:
+      - postgres
+    depends_on:
+      - postgres
 
 networks:
   postgres:
-    driver: bridge
 
 volumes:
     postgres:
-    pgadmin:
