@@ -2,8 +2,17 @@ from fastapi import FastAPI, HTTPException
 from database import Database
 from Classes.User import User
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 #Env variables
 db_name = os.environ['POSTGRES_DB']

@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title>List Users</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.status === 200 && xhr.readyState === 4) {
+                        const users = JSON.parse(xhr.responseText);
+                        for (const user of users) {
+                            let tableLine = document.createElement('tr');
+                            tableLine.innerHTML = '<td>' + user['id'] + '</td><td>' + user['name'] + '</td><td>' + user['email'] + '</td><td>' + user['age'] + '</td>';
+                            document.querySelector('tbody').appendChild(tableLine);
+                        }
+                        let tableLine = document.createElement('tr');
+                        tableLine.innerHTML = '<td>' + user['id'] + '</td><td>' + user['name'] + '</td><td>' + user['email'] + '</td><td>' + user['age'] + '</td>';
+                        document.querySelector('tbody').appendChild(tableLine);
+                    }
+                }
+                xhr.open('GET', 'http://54.81.142.185:30894/users', true);
+                xhr.send(null);
+            </script>
+        </tbody>
+    </table>
+</body>
+
+</html>
